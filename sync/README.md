@@ -1,0 +1,1 @@
+Krypterede swipe-svar fra familien. Se docs/DEVLOG.md session 17.
