@@ -1,4 +1,4 @@
-const CACHE = "sicily26-v2";
+const CACHE = "sicily26-v3";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./ikon-192.png", "./ikon-512.png"];
 
 self.addEventListener("install", e => {
@@ -15,7 +15,8 @@ self.addEventListener("activate", e => {
 
 self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
-  if (new URL(e.request.url).hostname === "api.github.com") return;
+  const vaert = new URL(e.request.url).hostname;
+  if (vaert === "api.github.com" || vaert === "api.anthropic.com") return;
   // navigationer: network-first (friskeste guide når der er net), cache offline
   if (e.request.mode === "navigate") {
     e.respondWith(
