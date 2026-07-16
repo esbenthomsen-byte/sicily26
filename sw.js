@@ -1,4 +1,4 @@
-const CACHE = "sicily26-v3";
+const CACHE = "sicily26-v4";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./ikon-192.png", "./ikon-512.png"];
 
 self.addEventListener("install", e => {
@@ -17,12 +17,15 @@ self.addEventListener("fetch", e => {
   if (e.request.method !== "GET") return;
   const vaert = new URL(e.request.url).hostname;
   if (vaert === "api.github.com" || vaert === "api.anthropic.com") return;
-  // navigationer: network-first (friskeste guide når der er net), cache offline
+  // navigationer: cache først (øjeblikkelig åbning), frisk udgave hentes i baggrunden til NÆSTE åbning
   if (e.request.mode === "navigate") {
     e.respondWith(
-      fetch(e.request)
-        .then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put("./index.html", cp)); return res; })
-        .catch(() => caches.match("./index.html"))
+      caches.match("./index.html").then(cached => {
+        const net = fetch(e.request)
+          .then(res => { const cp = res.clone(); caches.open(CACHE).then(c => c.put("./index.html", cp)); return res; })
+          .catch(() => cached);
+        return cached || net;
+      })
     );
     return;
   }
