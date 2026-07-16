@@ -1,5 +1,6 @@
-const CACHE = "sicily26-v4";
-const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./ikon-192.png", "./ikon-512.png"];
+const CACHE = "sicily26-v5";
+/* kun index.html caches ved install — "./" ville downloade de samme ~15 MB én gang til */
+const ASSETS = ["./index.html", "./manifest.webmanifest", "./ikon-192.png", "./ikon-512.png"];
 
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
